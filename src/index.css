@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+/* ألوان وخطوط الموقع (منقولة من الـ prototype). بتتحول لـ classes زي bg-teal و text-mut */
+@theme {
+  --color-teal: #0b4f4a;
+  --color-teal-dark: #083a36;
+  --color-copper: #c8793b;
+  --color-copper-dark: #a9622b;
+  --color-surface: #f6f3ee;
+  --color-ink: #18292a;
+  --color-mut: #66747a;
+  --color-line: #e3ddd1;
+  --color-success: #2f7d5b;
+  --color-error: #b5453d;
+
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-display: "DM Serif Display", Georgia, serif;
+}
+
+/* الأنيميشن بتاعة الـ prototype (أسماءها زي ما هي) */
+@keyframes kb {
+  to {
+    transform: scale(1.08);
+  }
+}
+@keyframes up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+@keyframes pg {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@keyframes signIn {
+  from {
+    opacity: 0;
+    transform: translateY(-34px) rotate(-9deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-3deg);
+  }
+}
+@keyframes sway {
+  from {
+    transform: rotate(-3.6deg);
+  }
+  to {
+    transform: rotate(-1.6deg);
+  }
+}
+
+/* الستايلات الأساسية للصفحة */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font: 15px/1.6 "Plus Jakarta Sans", system-ui, sans-serif;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    -webkit-text-size-adjust: 100%;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+  /* لون الـ placeholder زي الـ prototype (Tailwind كان بيخليه أفتح) */
+  ::placeholder {
+    color: #757575;
+    opacity: 1;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-copper);
+    outline-offset: 2px;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--color-teal);
+  }
+  form {
+    display: grid;
+    gap: 14px;
+  }
+  /* Tailwind بيشيل padding صغير جوه حقل التاريخ والوقت، فبنرجّعه عشان الارتفاع يبقى زي الـ prototype (44.8px) */
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 1px 0;
+  }
+  /* إخفاء أسهم الـ input من نوع number */
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+/* ظهور العناصر مع الـ scroll (بيتستخدم في Reveal) */
+.rv {
+  opacity: 0;
+}
+.rv.in {
+  opacity: 1;
+  animation: up 0.7s var(--d, 0ms) backwards cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* حركة دخول الصفحة: كل عنصر مباشر جوه <main> بيظهر بـ fade وحركة بسيطة لفوق */
+.page-enter > * {
+  animation: pg 0.45s both;
+}
+
+/* لو المستخدم مفعّل تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  * {
+    animation: none !important;
+  }
+  .rv {
+    opacity: 1;
+  }
+}
+
+/* scrollbar رفيع للأجهزة اللي فيها mouse فقط (مش الموبايل) */
+@media (hover: hover) and (pointer: fine) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #a9c2bd transparent;
+  }
+  html {
+    scrollbar-color: #8fb0aa var(--color-surface);
+  }
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #b6cbc6;
+    border-radius: 999px;
+    border: 3px solid var(--color-surface);
+    transition: background 0.2s;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-teal);
+  }
+  /* القوائم المنسدلة (Select وSearch) خلفيتها بيضا */
+  .scroll-white::-webkit-scrollbar-track {
+    background: #fff;
+  }
+  .scroll-white::-webkit-scrollbar-thumb {
+    border-color: #fff;
+  }
+}
